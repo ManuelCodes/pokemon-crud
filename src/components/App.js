@@ -1,51 +1,29 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { fetchPokemons } from '../actions';
+import { BrowserRouter, Route, Redirect,Switch } from 'react-router-dom';
+
+import List from './nationalPokedex/List';
+import Login from './login';
+import New from './nationalPokedex/New';
+
 
 class App extends React.Component {
 
-  componentDidMount() {
-    this.props.fetchPokemons();
-  }
-
-  renderList() {
-
-    return this.props.pokemon.map(pokemon => {
-        return (
-          <tr className="mdc-data-table__row" key={pokemon.id}>
-            <td className="mdc-data-table__cell mdc-data-table__cell--numeric">{pokemon.id}</td>
-            <td className="mdc-data-table__cell">{pokemon.name}</td>
-          </tr>
-        );
-    });
-  }
-
   render() {
+
     return (
       <div>
-        <div className="mdc-data-table">
-          <table className="mdc-data-table__table" aria-label="Dessert calories">
-            <thead>
-              <tr className="mdc-data-table__header-row">
-                <th className="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Id</th>
-                <th className="mdc-data-table__header-cell" role="columnheader" scope="col">Name</th>
-              </tr>
-            </thead>
-            <tbody className="mdc-data-table__content">
-              {this.renderList()}
-            </tbody>
-          </table>
-        </div>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/national-pokedex" exact component={List} />
+            <Route path="/national-pokedex/new" exact component={New} />
+            <Route path="/" exact component={Login} />
+            <Route path="/404" component={() => <div> not found </div>} />
+            <Redirect to="/404" />
+          </Switch>
+        </BrowserRouter>
       </div>
     );
   }
 };
 
-const mapStateToProps = state => {
-  return { pokemon: state.pokemons }
-}
-
-export default connect(
-  mapStateToProps,
-  { fetchPokemons })
-(App);
+export default App;
